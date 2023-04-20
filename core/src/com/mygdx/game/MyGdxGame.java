@@ -159,7 +159,7 @@ public class MyGdxGame extends ApplicationAdapter {
 				voando.play();
 
 			}
-			else if (estadoJogo == 1) {
+			else if (estadoJogo == 0) {
 				if(toqueTela){
 					gravidade=-15;
 					voando.play();
@@ -223,8 +223,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private void desenharTexturas(){
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(backGround,0,0, larguraDispositivo,alturaDispositivo);
-		//batch.draw(backGround,0,0,larguraDispositivo,alturaDispositivo);
+		batch.draw(backGround,0,0,larguraDispositivo,alturaDispositivo);
 		batch.draw(texPassaro[(int) variacao],
 				50 + posicaoHorizontal, posicaoInicial);
 
