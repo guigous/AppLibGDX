@@ -23,6 +23,9 @@ import java.util.Random;
 import jdk.nashorn.internal.runtime.Debug;
 
 public class MyGdxGame extends ApplicationAdapter {
+
+	//Declaracao de variaveis
+
 	private SpriteBatch batch;
 	private Texture[] passaros;
 	private Texture fundo;
@@ -75,6 +78,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	@Override
+	//Metodo que renderiza o jogo na tela
+	// Metodo que atualiza o jogo conforme ele roda
 	public void render () {
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
@@ -89,6 +94,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private void inicializarTexturas(){
 
+		//Instanciando texturas
+
 		passaros = new Texture[3];
 		passaros[0] = new Texture("passaro1.png");
 		passaros[1] = new Texture("passaro2.png");
@@ -102,7 +109,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	private void inicializaObjetos(){
-
+		//Instanciando Objetos, colisores, fontes, camera, viewport
+		// e atrelando valores a variaveis
 		batch = new SpriteBatch();
 		random = new Random();
 
@@ -143,6 +151,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	private void verificarEstadoJogo() {
+
+		//Maquina de estado do jogo
 
 		boolean toqueTela = Gdx.input.justTouched();
 		if(estadoJogo == 0) {
@@ -189,6 +199,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private void detectarColisoes() {
 
+		//demarcando colisores
+
 		circuloPassaro.set(
 				50 + posicaoHorizontalPassaro + passaros[0].getWidth() / 2,
 				posicaoInicialVerticalPassaro + passaros[0].getHeight() / 2,
@@ -205,6 +217,8 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoCanoHorizontal, alturaDispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical,
 				canoTopo.getWidth(), canoTopo.getHeight()
 		);
+		//Checando se o passaro bateu no cano de cima ou de baixo
+		//Tocando um som em caso afirmativo
 
 		boolean colidiuCanoCima = Intersector.overlaps(circuloPassaro, retanguloCanoCima);
 		boolean colidiuCanoBaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
@@ -220,6 +234,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
 	private void desenharTexturas() {
+		//Desenhando as texturas nas dimencoes certas
+
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(fundo,0,0,larguraDispositivo, alturaDispositivo);
@@ -232,6 +248,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		textoPontuacao.draw(batch, String.valueOf(pontos),larguraDispositivo / 2,
 				alturaDispositivo - 110);
 
+		//Mostrando a tela de GameOver de acordo com o estado do jogo
 		if (estadoJogo == 2) {
 			batch.draw(gameOver, larguraDispositivo / 2 - gameOver.getWidth()/2,
 					alturaDispositivo / 2);
@@ -249,6 +266,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	public void validarPontos() {
 
+		//verifica se o jogador passou pelos canos e registra os pontos
+
 		if(posicaoCanoHorizontal < 50 - passaros[0].getWidth()) {
 			if(!passouCano){
 				pontos++;
@@ -265,6 +284,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	@Override
+	//metodo que redimenciona o viewPort
 	public void resize(int width, int height) {
 		viewport.update(width, height);
 	}
