@@ -1,6 +1,6 @@
-# Titulo ou Arte do Projeto
+# Flappy Bird
 ## Versão: 1.0 
-## Status do Projeto: ✔️ Concluído ⚠️ Espera ❌ Cancelado
+## Status do Projeto:⚠️ Espera
 
 ## Tópicos
 🔹 Descrição do projeto 
