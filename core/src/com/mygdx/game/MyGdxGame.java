@@ -20,6 +20,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Random;
 
+import jdk.nashorn.internal.runtime.Debug;
+
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
@@ -159,7 +161,7 @@ public class MyGdxGame extends ApplicationAdapter {
 				voando.play();
 
 			}
-			else if (estadoJogo == 0) {
+			else if (estadoJogo == 1) {
 				if(toqueTela){
 					gravidade=-15;
 					voando.play();
@@ -194,6 +196,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 			}
 		}
+
 	}
 
 	private void detectarColisoes(){

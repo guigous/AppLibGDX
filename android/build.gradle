@@ -1,5 +1,4 @@
 android {
-    buildToolsVersion "29.0.3"
     compileSdkVersion 33
     sourceSets {
         main {
@@ -14,7 +13,9 @@ android {
 
     }
     packagingOptions {
-        exclude 'META-INF/robovm/ios/robovm.xml'
+        resources {
+            excludes += ['META-INF/robovm/ios/robovm.xml']
+        }
     }
     defaultConfig {
         applicationId "com.mygdx.game"
