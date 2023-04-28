@@ -27,11 +27,13 @@ public class MyGdxGame extends ApplicationAdapter {
 	//Declaracao de variaveis
 
 	private SpriteBatch batch;
-	private Texture[] passaros;
+	private Texture[] naruto;
 	private Texture fundo;
 	private Texture canoBaixo;
 	private Texture canoTopo;
 	private Texture gameOver;
+	private Texture moeda1;
+	private	Texture moeda2;
 
 	private ShapeRenderer shapeRenderer;
 	private Circle circuloPassaro;
@@ -96,15 +98,20 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		//Instanciando texturas
 
-		passaros = new Texture[3];
-		passaros[0] = new Texture("passaro1.png");
-		passaros[1] = new Texture("passaro2.png");
-		passaros[2] = new Texture("passaro3.png");
+		naruto = new Texture[6];
+		naruto[0] = new Texture("NarutoRun/NarutoRun1.png");
+		naruto[1] = new Texture("NarutoRun/NarutoRun2.png");
+		naruto[2] = new Texture("NarutoRun/NarutoRun3.png");
+		naruto[3] = new Texture("NarutoRun/NarutoRun4.png");
+		naruto[4] = new Texture("NarutoRun/NarutoRun5.png");
+		naruto[5] = new Texture("NarutoRun/NarutoRun6.png");
 
-		fundo = new Texture("fundo.png");
-		canoBaixo = new Texture("cano_baixo_maior.png");
-		canoTopo = new Texture("cano_topo_maior.png");
+		fundo = new Texture("NarutoRun/Training Field.png");
+		canoBaixo = new Texture("NarutoRun/TocoBaixo.png");
+		canoTopo = new Texture("NarutoRun/TocoTopo.png");
 		gameOver = new Texture("game_over.png");
+		moeda1= new Texture("NarutoRun/Moeda1.png");
+		moeda2= new Texture("NarutoRun/Moeda2.png");
 
 	}
 
@@ -202,9 +209,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		//demarcando colisores
 
 		circuloPassaro.set(
-				50 + posicaoHorizontalPassaro + passaros[0].getWidth() / 2,
-				posicaoInicialVerticalPassaro + passaros[0].getHeight() / 2,
-				passaros[0].getWidth() / 2
+				50 + posicaoHorizontalPassaro + naruto[0].getWidth() / 2,
+				posicaoInicialVerticalPassaro + naruto[0].getHeight() / 2,
+				naruto[0].getWidth() / 2
 		);
 
 		retanguloCanoBaixo.set(
@@ -239,7 +246,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(fundo,0,0,larguraDispositivo, alturaDispositivo);
-		batch.draw(passaros[(int) variacao] ,
+		batch.draw(naruto[(int) variacao] ,
 				50 + posicaoHorizontalPassaro,posicaoInicialVerticalPassaro);
 		batch.draw(canoBaixo, posicaoCanoHorizontal,
 				alturaDispositivo / 2 - canoBaixo.getHeight() - espacoEntreCanos / 2 + posicaoCanoVertical);
@@ -268,7 +275,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		//verifica se o jogador passou pelos canos e registra os pontos
 
-		if(posicaoCanoHorizontal < 50 - passaros[0].getWidth()) {
+		if(posicaoCanoHorizontal < 50 - naruto[0].getWidth()) {
 			if(!passouCano){
 				pontos++;
 				passouCano = true;
