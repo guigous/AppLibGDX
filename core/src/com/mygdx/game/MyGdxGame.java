@@ -40,6 +40,10 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Rectangle retanguloCanoCima;
 	private Rectangle retanguloCanoBaixo;
 
+	private Circle circuloMoeda1;
+
+	private Circle circuloMoeda2;
+
 	private float larguraDispositivo;
 	private float alturaDispositivo;
 	private float variacao = 0;
@@ -54,6 +58,9 @@ public class MyGdxGame extends ApplicationAdapter {
 	private boolean passouCano = false;
 	private int estadoJogo = 0;
 	private float posicaoHorizontalPassaro = 0;
+
+	private int posMin;
+	private int posMax;
 
 	BitmapFont textoPontuacao;
 	BitmapFont textoReiniciar;
@@ -143,6 +150,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		circuloPassaro = new Circle();
 		retanguloCanoBaixo = new Rectangle();
 		retanguloCanoCima = new Rectangle();
+		circuloMoeda1 = new Circle();
+		circuloMoeda2 = new Circle();
+
 
 		somVoando = Gdx.audio.newSound( Gdx.files.internal("som_asa.wav") );
 		somColisao = Gdx.audio.newSound( Gdx.files.internal("som_batida.wav") );
@@ -154,6 +164,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.position.set(VIRTUAL_WIDTH/2, VIRTUAL_HEIGHT/2,0);
 		viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
+
+
 
 	}
 
@@ -224,17 +236,34 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoCanoHorizontal, alturaDispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical,
 				canoTopo.getWidth(), canoTopo.getHeight()
 		);
+
+		circuloMoeda1.set(
+				moeda1.getHeight(),moeda1.getWidth(), moeda1.getWidth()/2
+		);
+		circuloMoeda2.set(
+				moeda2.getHeight(),moeda2.getWidth(), moeda2.getWidth()/2
+		);
+
+
 		//Checando se o passaro bateu no cano de cima ou de baixo
 		//Tocando um som em caso afirmativo
 
 		boolean colidiuCanoCima = Intersector.overlaps(circuloPassaro, retanguloCanoCima);
 		boolean colidiuCanoBaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
+		boolean colidiuMoeda1= Intersector.overlaps(circuloPassaro,circuloMoeda1);
+		boolean colidiuMoeda2= Intersector.overlaps(circuloPassaro,circuloMoeda2);
 
 		if (colidiuCanoCima || colidiuCanoBaixo) {
 			if(estadoJogo ==1) {
 				somColisao.play();
 				estadoJogo = 2;
 			}
+		}
+		if (colidiuMoeda1){
+			pontos += 10;
+		}
+		if (colidiuMoeda2){
+			pontos +=5;
 		}
 
 	}
@@ -254,6 +283,8 @@ public class MyGdxGame extends ApplicationAdapter {
 				alturaDispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical);
 		textoPontuacao.draw(batch, String.valueOf(pontos),larguraDispositivo / 2,
 				alturaDispositivo - 110);
+		batch.draw(moeda1, posicaoCanoHorizontal,
+				alturaDispositivo/2 - canoBaixo.getHeight() + espacoEntreCanos/2 + posicaoCanoVertical );
 
 		//Mostrando a tela de GameOver de acordo com o estado do jogo
 		if (estadoJogo == 2) {
