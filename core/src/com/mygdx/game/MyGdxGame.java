@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -21,6 +22,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Random;
 
 import jdk.nashorn.internal.runtime.Debug;
+import sun.java2d.loops.DrawRect;
+import sun.java2d.pipe.ShapeDrawPipe;
 
 public class MyGdxGame extends ApplicationAdapter {
 
@@ -60,6 +63,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private float posicaoHorizontalPassaro = 0;
 
 	private int posMin;
+
 	private int posMax;
 
 	BitmapFont textoPontuacao;
@@ -77,6 +81,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	private final float VIRTUAL_WIDTH = 720;
 	private final float VIRTUAL_HEIGHT = 1280;
 
+	float posicaoMoeda = alturaDispositivo + 100;
+
 
 
 	@Override
@@ -84,6 +90,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		inicializarTexturas();
 		inicializaObjetos();
+
 	}
 
 	@Override
@@ -96,6 +103,16 @@ public class MyGdxGame extends ApplicationAdapter {
 		validarPontos();
 		desenharTexturas();
 		detectarColisoes();
+
+		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+		shapeRenderer.setColor(Color.RED);
+		shapeRenderer.rect(posicaoCanoHorizontal , canoBaixo.getHeight(), moeda1.getWidth(), moeda1.getHeight());
+		shapeRenderer.end();
+
+
+
+
 
 
 	}
@@ -123,6 +140,10 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	private void inicializaObjetos(){
+
+
+
+
 		//Instanciando Objetos, colisores, fontes, camera, viewport
 		// e atrelando valores a variaveis
 		batch = new SpriteBatch();
@@ -167,6 +188,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
 
+
+
 	}
 
 	private void verificarEstadoJogo() {
@@ -188,7 +211,7 @@ public class MyGdxGame extends ApplicationAdapter {
 			}
 			posicaoCanoHorizontal -= Gdx.graphics.getDeltaTime() * 200;
 			if( posicaoCanoHorizontal < -canoTopo.getWidth() ){
-				posicaoCanoHorizontal = larguraDispositivo;
+				posicaoCanoHorizontal = larguraDispositivo+100;
 				posicaoCanoVertical = random.nextInt(400) - 200;
 				passouCano = false;
 			}
@@ -218,6 +241,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private void detectarColisoes() {
 
+
+
 		//demarcando colisores
 
 		circuloPassaro.set(
@@ -238,7 +263,10 @@ public class MyGdxGame extends ApplicationAdapter {
 		);
 
 		circuloMoeda1.set(
-				moeda1.getHeight(),moeda1.getWidth(), moeda1.getWidth()/2
+				posicaoCanoHorizontal + canoBaixo.getWidth() - moeda1.getWidth()/2,
+				posicaoCanoVertical + canoTopo.getHeight() + espacoEntreCanos/2-moeda1.getHeight()/2 + MathUtils.random(- espacoEntreCanos/4 , espacoEntreCanos/4),
+				moeda1.getHeight() * 2
+
 		);
 		circuloMoeda2.set(
 				moeda2.getHeight(),moeda2.getWidth(), moeda2.getWidth()/2
@@ -250,20 +278,30 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		boolean colidiuCanoCima = Intersector.overlaps(circuloPassaro, retanguloCanoCima);
 		boolean colidiuCanoBaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
-		boolean colidiuMoeda1= Intersector.overlaps(circuloPassaro,circuloMoeda1);
-		boolean colidiuMoeda2= Intersector.overlaps(circuloPassaro,circuloMoeda2);
+		boolean colidiuMoeda1 = Intersector.overlaps(circuloPassaro,circuloMoeda1);
+		boolean colidiuMoeda2 = Intersector.overlaps(circuloPassaro,circuloMoeda2);
 
 		if (colidiuCanoCima || colidiuCanoBaixo) {
-			if(estadoJogo ==1) {
+			if(estadoJogo == 1) {
 				somColisao.play();
 				estadoJogo = 2;
 			}
 		}
 		if (colidiuMoeda1){
+
 			pontos += 10;
+
+
+			circuloMoeda1.set(
+					100, 100, 0
+
+			);
+
+
+
 		}
 		if (colidiuMoeda2){
-			pontos +=5;
+			pontos += 5;
 		}
 
 	}
@@ -283,8 +321,8 @@ public class MyGdxGame extends ApplicationAdapter {
 				alturaDispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical);
 		textoPontuacao.draw(batch, String.valueOf(pontos),larguraDispositivo / 2,
 				alturaDispositivo - 110);
-		batch.draw(moeda1, posicaoCanoHorizontal,
-				alturaDispositivo/2 - canoBaixo.getHeight() + espacoEntreCanos/2 + posicaoCanoVertical );
+		batch.draw(moeda1, posicaoCanoHorizontal , canoBaixo.getHeight()
+				 );
 
 		//Mostrando a tela de GameOver de acordo com o estado do jogo
 		if (estadoJogo == 2) {
