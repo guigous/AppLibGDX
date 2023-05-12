@@ -43,6 +43,10 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Rectangle retanguloCanoCima;
 	private Rectangle retanguloCanoBaixo;
 
+	private Rectangle morreEmCima;
+
+	private Rectangle morreEmBaixo;
+
 	private Circle circuloMoeda1;
 
 	private Circle circuloMoeda2;
@@ -180,6 +184,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		retanguloCanoCima = new Rectangle();
 		circuloMoeda1 = new Circle();
 		circuloMoeda2 = new Circle();
+		morreEmBaixo = new Rectangle();
+		morreEmCima = new Rectangle();
 
 
 		somVoando = Gdx.audio.newSound( Gdx.files.internal("som_asa.wav") );
@@ -291,6 +297,14 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoHorizontalMoeda2, posicaoVerticalMoeda2,moeda2.getHeight()/2
 		);
 
+		morreEmBaixo.set(
+				1,0,larguraDispositivo,10
+		);
+		morreEmCima.set(
+				1, alturaDispositivo,larguraDispositivo, 10
+				);
+
+
 
 		//Checando se o passaro bateu no cano de cima ou de baixo
 		//Tocando um som em caso afirmativo
@@ -299,6 +313,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		boolean colidiuCanoBaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
 		boolean colidiuMoeda1 = Intersector.overlaps(circuloPassaro,circuloMoeda1);
 		boolean colidiuMoeda2 = Intersector.overlaps(circuloPassaro,circuloMoeda2);
+		boolean colidiuCima = Intersector.overlaps(circuloPassaro,morreEmCima);
+		boolean colidiuBaixo = Intersector.overlaps(circuloPassaro, morreEmBaixo );
 
 		if (colidiuCanoCima || colidiuCanoBaixo) {
 			if(estadoJogo == 1) {
@@ -319,6 +335,10 @@ public class MyGdxGame extends ApplicationAdapter {
 		if (colidiuMoeda2){
 			pontos += 5;
 			posicaoVerticalMoeda2 = alturaDispositivo*10;
+		}
+		if (colidiuBaixo ||  colidiuCima){
+			somColisao.play();
+			estadoJogo  = 2;
 		}
 
 	}
