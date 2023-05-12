@@ -66,6 +66,14 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private int posMax;
 
+	private float posicaoVerticalMoeda1 = 0;
+
+	private float posicaoHorizontalMoeda1 = 0;
+
+	private float posicaoHorizontalMoeda2 = 0;
+
+	private float posicaoVerticalMoeda2 =0;
+
 	BitmapFont textoPontuacao;
 	BitmapFont textoReiniciar;
 	BitmapFont textoMelhorPontuacao;
@@ -81,7 +89,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private final float VIRTUAL_WIDTH = 720;
 	private final float VIRTUAL_HEIGHT = 1280;
 
-	float posicaoMoeda = alturaDispositivo + 100;
+	float posicaoMoeda = 0;
 
 
 
@@ -107,7 +115,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.rect(posicaoCanoHorizontal , canoBaixo.getHeight(), moeda1.getWidth(), moeda1.getHeight());
 		shapeRenderer.end();
 
 
@@ -219,6 +226,18 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoInicialVerticalPassaro = posicaoInicialVerticalPassaro - gravidade;
 			gravidade++;
 
+			posicaoHorizontalMoeda1 -= Gdx.graphics.getDeltaTime() *200;
+			if (posicaoHorizontalMoeda1 < -canoTopo.getWidth()){
+				posicaoHorizontalMoeda1 = larguraDispositivo+100;
+				posicaoVerticalMoeda1 = random.nextInt((int) alturaDispositivo);
+			}
+			posicaoHorizontalMoeda2 -= Gdx.graphics.getDeltaTime() *200;
+			if (posicaoHorizontalMoeda2 < -canoTopo.getWidth()){
+				posicaoHorizontalMoeda2 = larguraDispositivo+100;
+				posicaoVerticalMoeda2 = random.nextInt((int) alturaDispositivo - 100);
+			}
+
+
 		}else if(estadoJogo ==2) {
 			if( pontos > pontuacaoMaxima ) {
 				pontuacaoMaxima = pontos;
@@ -234,6 +253,7 @@ public class MyGdxGame extends ApplicationAdapter {
 				posicaoHorizontalPassaro = 0;
 				posicaoInicialVerticalPassaro = alturaDispositivo / 2;
 				posicaoCanoHorizontal = larguraDispositivo;
+
 			}
 		}
 	}
@@ -263,13 +283,12 @@ public class MyGdxGame extends ApplicationAdapter {
 		);
 
 		circuloMoeda1.set(
-				posicaoCanoHorizontal + canoBaixo.getWidth() - moeda1.getWidth()/2,
-				posicaoCanoVertical + canoTopo.getHeight() + espacoEntreCanos/2-moeda1.getHeight()/2 + MathUtils.random(- espacoEntreCanos/4 , espacoEntreCanos/4),
-				moeda1.getHeight() * 2
+				posicaoHorizontalMoeda1, posicaoVerticalMoeda1,
+				moeda1.getHeight() / 2
 
 		);
 		circuloMoeda2.set(
-				moeda2.getHeight(),moeda2.getWidth(), moeda2.getWidth()/2
+				posicaoHorizontalMoeda2, posicaoVerticalMoeda2,moeda2.getHeight()/2
 		);
 
 
@@ -290,18 +309,16 @@ public class MyGdxGame extends ApplicationAdapter {
 		if (colidiuMoeda1){
 
 			pontos += 10;
+			posicaoVerticalMoeda1 = alturaDispositivo*10;
 
 
-			circuloMoeda1.set(
-					100, 100, 0
-
-			);
 
 
 
 		}
 		if (colidiuMoeda2){
 			pontos += 5;
+			posicaoVerticalMoeda2 = alturaDispositivo*10;
 		}
 
 	}
@@ -321,8 +338,10 @@ public class MyGdxGame extends ApplicationAdapter {
 				alturaDispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical);
 		textoPontuacao.draw(batch, String.valueOf(pontos),larguraDispositivo / 2,
 				alturaDispositivo - 110);
-		batch.draw(moeda1, posicaoCanoHorizontal , canoBaixo.getHeight()
+		batch.draw(moeda1, posicaoHorizontalMoeda1, posicaoVerticalMoeda1
 				 );
+		batch.draw(moeda2, posicaoHorizontalMoeda2 , posicaoVerticalMoeda2
+		         );
 
 		//Mostrando a tela de GameOver de acordo com o estado do jogo
 		if (estadoJogo == 2) {
